@@ -1,0 +1,59 @@
+{
+  consul: "consul:8500",
+  logging: {
+    level: "DEBUG",
+    format: "text"
+  },
+  jobs: [
+    {
+      // without a "when" field this will start first
+      name: "preStart",
+      exec: "/bin/reload-nginx.sh preStart"
+    },
+    {
+      name: "nginx",
+      port: 80,
+      interfaces: ["eth1", "eth0"],
+      exec: "nginx",
+      when: {
+        source: "preStart",
+        event: "exitSuccess"
+      },
+      health: {
+        exec: "/usr/bin/curl -o /dev/null --fail -s http://localhost/health",
+        interval: 10,
+        ttl: 25
+      }
+    },
+    {
+      name: "onchange-hello",
+      exec: "/bin/reload-nginx.sh onChange",
+      when: {
+        source: "watch.hello",
+        event: "changed"
+      },
+      // ref https://github.com/joyent/containerpilot/issues/323
+      restarts: "unlimited"
+    },
+    {
+      name: "onchange-world",
+      exec: "/bin/reload-nginx.sh onChange",
+      when: {
+        source: "watch.world",
+        event: "changed"
+      },
+      // ref https://github.com/joyent/containerpilot/issues/323
+      restarts: "unlimited"
+    }
+  ],
+  watches: [
+    {
+      name: "hello",
+      interval: 3
+    },
+    {
+      name: "world",
+      interval: 3
+    }
+  ]
+}
