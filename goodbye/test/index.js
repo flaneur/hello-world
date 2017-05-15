@@ -5,7 +5,7 @@
 const Code = require('code');
 const Lab = require('lab');
 const Wreck = require('wreck');
-const Hello = require('../');
+const Goodbye = require('../');
 
 
 // Test shortcuts
@@ -16,12 +16,12 @@ const it = lab.it;
 const expect = Code.expect;
 
 
-describe('Hello', () => {
-  it('responds with a 200 and the word "Hello"', (done) => {
-    Wreck.get(`http://localhost:${Hello.address().port}/`, (err, res, payload) => {
+describe('Goodbye', () => {
+  it('responds with a 200 and the word "Goodbye"', (done) => {
+    Wreck.get(`http://localhost:${Goodbye.address().port}/`, (err, res, payload) => {
       expect(err).to.not.exist();
       expect(res.statusCode).to.equal(200);
-      expect(payload.toString()).to.equal('Hello');
+      expect(payload.toString()).to.equal('Goodbye');
       done();
     });
   });
