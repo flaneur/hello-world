@@ -1,5 +1,6 @@
 # Hello World using the Autopilot Pattern
 # add this for test
+# another test string
 
 1. `git clone git@github.com:autopilotpattern/hello-world.git`
 2. `cd hello-world`
